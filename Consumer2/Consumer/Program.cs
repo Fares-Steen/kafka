@@ -12,7 +12,6 @@ using var consumer = new ConsumerBuilder<Null, string>(config).Build();
 consumer.Subscribe("four");
 CancellationToken token = new();
 
-
 try
 {
     while (true)
