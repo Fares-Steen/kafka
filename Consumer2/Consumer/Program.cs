@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using Newtonsoft.Json;
+using System.Globalization;
 
 var config = new ConsumerConfig
 {
@@ -9,7 +10,7 @@ var config = new ConsumerConfig
 };
 
 using var consumer = new ConsumerBuilder<Null, string>(config).Build();
-consumer.Subscribe("four");
+consumer.Subscribe("five");
 CancellationToken token = new();
 
 try
@@ -19,6 +20,9 @@ try
         var response = consumer.Consume(token);
         if (response.Message != null)
         {
+            string timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff",
+                CultureInfo.InvariantCulture);
+            Console.WriteLine(timestamp);    
             var weather = JsonConvert.DeserializeObject<Weather>(response.Message.Value);
             Console.WriteLine($"{weather!.State} temperature {weather.Temperature}");
         }
